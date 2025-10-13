@@ -12,11 +12,16 @@ typedef struct {
 static IRPulse_t pulseBuffer[MAX_PULSES];
 static uint16_t pulseCount = 0;
 
-static uint32_t pulseTime = 0;       // Duración del pulso actual
-static uint8_t lastLevel = 1;        // Estado inicial (reposo = 1 lógico)
-static uint32_t idleTime = 0;        // Tiempo sin cambios
+static uint32_t pulseTime = 0;
+static uint8_t lastLevel = 1;
+static uint32_t idleTime = 0;
 
-// Interrupción del TICK cada SAMPLE_PERIOD_US
+static bool tramaCompleta = false;
+
+// --- Prototipo de funciones ---
+void emitirTrama(void);
+
+// ISR periódica (50 kHz)
 void sampleISR(void *ptr) {
    uint8_t level = gpioRead(GPIO7);
 
@@ -24,37 +29,29 @@ void sampleISR(void *ptr) {
    idleTime  += SAMPLE_PERIOD_US;
 
    if(level != lastLevel) {
-      // Cambio detectado → guardar el pulso anterior
       if(pulseCount < MAX_PULSES) {
          pulseBuffer[pulseCount].level = lastLevel;
          pulseBuffer[pulseCount].duration = pulseTime;
          pulseCount++;
       }
 
-      // Reiniciar contadores
       lastLevel = level;
       pulseTime = 0;
       idleTime  = 0;
    }
 
-   // Detectar fin de trama (timeout)
+   // Fin de trama (sin cambios por 40 ms)
    if(idleTime >= TIMEOUT_US && pulseCount > 0) {
-      // Guardar último pulso
+
       if(pulseCount < MAX_PULSES) {
          pulseBuffer[pulseCount].level = lastLevel;
          pulseBuffer[pulseCount].duration = pulseTime;
          pulseCount++;
       }
 
-      // Señal de trama completa: imprimir resultado
-      printf("Trama capturada (%d pulsos):\r\n", pulseCount);
-      for(int i=0; i<pulseCount; i++) {
-         printf("[%d] Nivel=%d, Dur=%lu us\r\n",
-                i, pulseBuffer[i].level, pulseBuffer[i].duration);
-      }
+      tramaCompleta = true; // marcar para procesar en main()
 
-      // Resetear para próxima trama
-      pulseCount = 0;
+      // Reiniciar para próxima captura
       pulseTime = 0;
       idleTime  = 0;
       lastLevel = 1;
@@ -63,16 +60,45 @@ void sampleISR(void *ptr) {
 
 int main(void) {
    boardConfig();
+   uartConfig(UART_USB, 115200);  // Serial USB
 
-   // Configurar entrada (receptor IR en GPIO7)
-   gpioConfig(GPIO7, GPIO_INPUT);
+   gpioConfig(GPIO6, GPIO_OUTPUT); // Emisor IR
+   gpioConfig(GPIO7, GPIO_INPUT);  // Receptor IR
 
-   // Configurar Ticker de alta frecuencia
-   tickConfig(SAMPLE_PERIOD_US);      // Configura base de tiempo
-   tickCallbackSet(sampleISR, NULL);  // ISR periódica
+   tickConfig(SAMPLE_PERIOD_US);
+   tickCallbackSet(sampleISR, NULL);
+
+   printf("Sistema listo. Esperando señal IR...\r\n");
 
    while(true) {
-      // El procesamiento ocurre en la ISR
-      __WFI(); // Esperar interrupción
+
+      // Si se completó una trama
+      if(tramaCompleta) {
+         tramaCompleta = false;
+         printf("Señal IR recibida (%d pulsos)\r\n", pulseCount);
+      }
+
+      // Si el usuario envía una 'E', emitir la señal almacenada
+      if(uartRxReady(UART_USB)) {
+         char c = uartRxRead(UART_USB);
+         if(c == 'E' || c == 'e') {
+            printf("Reproduciendo señal IR...\r\n");
+            emitirTrama();
+         }
+      }
+
+      __WFI(); // Esperar interrupciones
    }
+}
+
+// --- Reproducir la señal capturada ---
+void emitirTrama(void) {
+   for(int i = 0; i < pulseCount; i++) {
+      gpioWrite(GPIO6, pulseBuffer[i].level);
+      delayMicroseconds(pulseBuffer[i].duration);
+   }
+
+   // Apagar emisor al terminar
+   gpioWrite(GPIO6, 0);
+   printf("Emisión finalizada\r\n");
 }
