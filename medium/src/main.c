@@ -28,6 +28,12 @@
 #include "ui_controller.h"
 #include "housekeeping.h"
 
+/* FatFS includes for disk timer */
+#include "ff.h"
+
+/* Forward declaration */
+void diskTickHook(void *ptr);
+
 /*==================[macros and definitions]=================================*/
 
 /* Task priorities (higher number = higher priority) */
@@ -69,6 +75,10 @@ static TaskHandle_t xTaskHousekeeping = NULL;
 
 /*==================[external functions definition]==========================*/
 
+// FUNCION que se ejecuta cada vezque ocurre un Tick
+void diskTickHook( void *ptr );
+
+
 /**
  * @brief Initializes all hardware peripherals
  */
@@ -80,10 +90,18 @@ static void initHardware(void)
     /* Initialize UART for debugging */
     uartConfig(UART_USB, 115200);
     printf("\r\n=== Médium Device Firmware ===\r\n");
+
+    sdConfig();
+    
+    /* SPI configuration for SD card */
+    spiConfig(SPI0);
+    
+    /* Configure tick hook for disk timer (required by FatFS) */
+    tickConfig(10);  // 10ms tick resolution
+    tickCallbackSet(diskTickHook, NULL);
     
     /* TODO: Initialize IR receiver/transmitter */
     /* TODO: Initialize RF receiver/transmitter */
-    /* TODO: Initialize SD card interface */
     /* TODO: Initialize LCD display */
     /* TODO: Initialize GPIO for buttons */
     /* TODO: Initialize Timer Capture for IR/RF */
@@ -239,6 +257,15 @@ int main(void)
     while (1);
     
     return 0;
+}
+
+/**
+ * @brief Disk timer hook (required by FatFS)
+ * Must be called periodically (every 10ms) for SD card timing
+ */
+void diskTickHook(void *ptr)
+{
+    disk_timerproc();  // Disk timer process (FatFS internal function)
 }
 
 /*==================[end of file]============================================*/

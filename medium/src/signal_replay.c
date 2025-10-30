@@ -19,44 +19,44 @@ void vReplay_Task(void *pvParameters)
 {
     printf("Replay Task started.\r\n");
     
-    for (;;) {
-        switch (xReplayState) {
-            case REPLAY_STATE_IDLE:
-                /* Wait for replay command */
-                vTaskDelay(pdMS_TO_TICKS(100));
-                break;
+    // for (;;) {
+    //     switch (xReplayState) {
+    //         case REPLAY_STATE_IDLE:
+    //             /* Wait for replay command */
+    //             vTaskDelay(pdMS_TO_TICKS(100));
+    //             break;
                 
-            case REPLAY_STATE_LOADING:
-                /* TODO: Load signal from SD card */
-                printf("Loading signal: %s\r\n", replay_filename);
-                xReplayState = REPLAY_STATE_READY;
-                break;
+    //         case REPLAY_STATE_LOADING:
+    //             /* TODO: Load signal from SD card */
+    //             printf("Loading signal: %s\r\n", replay_filename);
+    //             xReplayState = REPLAY_STATE_READY;
+    //             break;
                 
-            case REPLAY_STATE_READY:
-                /* Wait for play command */
-                vTaskDelay(pdMS_TO_TICKS(50));
-                break;
+    //         case REPLAY_STATE_READY:
+    //             /* Wait for play command */
+    //             vTaskDelay(pdMS_TO_TICKS(50));
+    //             break;
                 
-            case REPLAY_STATE_PLAYING:
-                /* TODO: Reproduce signal with precise timing */
-                printf("Replaying...\r\n");
-                vTaskDelay(pdMS_TO_TICKS(100));
+    //         case REPLAY_STATE_PLAYING:
+    //             /* TODO: Reproduce signal with precise timing */
+    //             printf("Replaying...\r\n");
+    //             vTaskDelay(pdMS_TO_TICKS(100));
                 
-                /* Update progress */
-                xReplayProgress++;
-                if (xReplayProgress >= 100) {
-                    xReplayProgress = 0;
-                    xReplayState = REPLAY_STATE_IDLE;
-                }
-                break;
+    //             /* Update progress */
+    //             xReplayProgress++;
+    //             if (xReplayProgress >= 100) {
+    //                 xReplayProgress = 0;
+    //                 xReplayState = REPLAY_STATE_IDLE;
+    //             }
+    //             break;
                 
-            case REPLAY_STATE_ERROR:
-                /* Error handling */
-                vTaskDelay(pdMS_TO_TICKS(1000));
-                xReplayState = REPLAY_STATE_IDLE;
-                break;
-        }
-    }
+    //         case REPLAY_STATE_ERROR:
+    //             /* Error handling */
+    //             vTaskDelay(pdMS_TO_TICKS(1000));
+    //             xReplayState = REPLAY_STATE_IDLE;
+    //             break;
+    //     }
+    // }
 }
 
 BaseType_t Replay_Start(const char *filename)
