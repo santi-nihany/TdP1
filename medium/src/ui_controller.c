@@ -14,7 +14,7 @@
 #include "signal_capture.h"
 #include "signal_replay.h"
 #include "signal_storage.h"
-#include "main.h"
+#include <stdio.h>
 
 /*==================[internal data]==========================================*/
 

@@ -27,12 +27,14 @@
 #include "signal_replay.h"
 #include "ui_controller.h"
 #include "housekeeping.h"
+#include "test_storage.h"
 
 /* FatFS includes for disk timer */
 #include "ff.h"
 
 /* Forward declaration */
 void diskTickHook(void *ptr);
+void disk_timerproc(void);
 
 /*==================[macros and definitions]=================================*/
 
@@ -43,6 +45,7 @@ void diskTickHook(void *ptr);
 #define PRIORITY_REPLAY_TASK           2
 #define PRIORITY_UI_TASK               1
 #define PRIORITY_HOUSEKEEPING_TASK     1
+#define PRIORITY_TEST_STORAGE_TASK     1
 
 /* Task stack sizes */
 #define STACK_SIZE_CAPTURE            512
@@ -50,6 +53,7 @@ void diskTickHook(void *ptr);
 #define STACK_SIZE_REPLAY             512
 #define STACK_SIZE_UI                1024
 #define STACK_SIZE_HOUSEKEEPING       256
+#define STACK_SIZE_TEST_STORAGE       512
 
 /* StreamBuffer and Queue sizes */
 #define STREAM_BUFFER_SIZE           2048
@@ -72,6 +76,7 @@ static TaskHandle_t xTaskStorage = NULL;
 static TaskHandle_t xTaskReplay = NULL;
 static TaskHandle_t xTaskUI = NULL;
 static TaskHandle_t xTaskHousekeeping = NULL;
+static TaskHandle_t xTaskTestStorage = NULL;
 
 /*==================[external functions definition]==========================*/
 
@@ -123,7 +128,7 @@ static void initRTOSPrimitives(void)
     }
     
     /* Create Storage Queue */
-    xStorageQueue = xQueueCreate(STORAGE_QUEUE_SIZE, sizeof(SignalPacket_t));
+    xStorageQueue = xQueueCreate(STORAGE_QUEUE_SIZE, sizeof(SignalPacket_t*));
     if (xStorageQueue == NULL) {
         printf("ERROR: Failed to create Storage Queue!\r\n");
         while (1);
@@ -208,6 +213,16 @@ static void createTasks(void)
         NULL,
         PRIORITY_HOUSEKEEPING_TASK,
         &xTaskHousekeeping
+    );
+
+    /* Create Test Storage Task */
+    xTaskCreate(
+        vStorageTest_Task,
+        "StorageTest",
+        STACK_SIZE_TEST_STORAGE,
+        NULL,
+        PRIORITY_TEST_STORAGE_TASK,
+        &xTaskTestStorage
     );
     
     printf("Tasks created.\r\n");
