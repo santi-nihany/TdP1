@@ -59,11 +59,11 @@ void diskTickHook(void *ptr);
 /*==================[internal data definition]===============================*/
 
 /* FreeRTOS handles */
-static StreamBufferHandle_t xStreamBufferIR = NULL;
-static StreamBufferHandle_t xStreamBufferRF = NULL;
-static QueueHandle_t xStorageQueue = NULL;
-static QueueHandle_t xUICommandQueue = NULL;
-static SemaphoreHandle_t xStorageMutex = NULL;
+StreamBufferHandle_t xStreamBufferIR = NULL;
+StreamBufferHandle_t xStreamBufferRF = NULL;
+QueueHandle_t xStorageQueue = NULL;
+QueueHandle_t xUICommandQueue = NULL;
+SemaphoreHandle_t xStorageMutex = NULL;
 
 /* Task handles */
 static TaskHandle_t xTaskSignalCaptureIR = NULL;
@@ -91,8 +91,6 @@ static void initHardware(void)
     uartConfig(UART_USB, 115200);
     printf("\r\n=== Médium Device Firmware ===\r\n");
 
-    sdConfig();
-    
     /* SPI configuration for SD card */
     spiConfig(SPI0);
     

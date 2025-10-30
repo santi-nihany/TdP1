@@ -6,6 +6,7 @@
 #include "signal_capture.h"
 #include "signal_storage.h"
 #include "main.h"
+#include <stdio.h>
 
 /*==================[internal data]==========================================*/
 
@@ -32,7 +33,7 @@ void vSignalCaptureIR_Task(void *pvParameters)
     
     for (;;) {
         printf("hello from signal capture IR");
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(10000));
         // /* Wait for watermark or notification that capture is complete */
         // bytes_received = xStreamBufferReceive(
         //     xStreamBufferIR,

@@ -21,7 +21,7 @@ void vHousekeeping_Task(void *pvParameters)
     
     for (;;) {
         printf("hello from housekeep");
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(10000));
         // /* Monitor free heap */
         // uint32_t free_heap = xPortGetFreeHeapSize();
         // if (free_heap < min_free_heap) {

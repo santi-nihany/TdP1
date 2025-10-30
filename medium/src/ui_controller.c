@@ -162,7 +162,7 @@ void vUI_Task(void *pvParameters)
     
     for (;;) {
         printf("hello from ui controller");
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(10000));
         // /* Check for incoming commands */
         // if (xQueueReceive(xUICommandQueue, &command, 0) == pdPASS) {
         //     ProcessUICommand(command);

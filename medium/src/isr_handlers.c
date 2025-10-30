@@ -12,6 +12,8 @@
 #include "signal_capture.h"
 #include "FreeRTOS.h"
 #include "stream_buffer.h"
+#include "queue.h"
+#include "ui_controller.h"
 #include "main.h"
 
 /*==================[external data]==========================================*/

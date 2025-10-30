@@ -27,7 +27,7 @@
 
 static FATFS fs;           // FatFs work area needed for each volume
 static FIL fil;            // File object
-static bool_t sd_mounted = FALSE;
+static BaseType_t sd_mounted = pdFALSE;
 static SemaphoreHandle_t xStorageInUse = NULL;
 
 /*==================[external data]==========================================*/
@@ -58,7 +58,7 @@ static BaseType_t MountSD(void)
     fr = f_mount(&fs, "SDC:", 1); // 1 = force mount
     
     if (fr == FR_OK) {
-        sd_mounted = TRUE;
+        sd_mounted = pdTRUE;
         printf("[Storage] SD card mounted successfully\r\n");
         
         // Create signals directory if it doesn't exist
@@ -67,7 +67,7 @@ static BaseType_t MountSD(void)
         return pdPASS;
     } else {
         printf("[Storage] ERROR: Failed to mount SD card (FRESULT=%d)\r\n", fr);
-        sd_mounted = FALSE;
+        sd_mounted = pdFALSE;
         return pdFAIL;
     }
 }
@@ -119,7 +119,7 @@ void vStorage_Task(void *pvParameters)
     // // Main task loop
     for (;;) {
         printf("hello from storage");
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(10000));
         // // Wait for packets from capture tasks
         // if (xQueueReceive(xStorageQueue, &packet, portMAX_DELAY) == pdPASS) {
             

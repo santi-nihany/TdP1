@@ -6,6 +6,8 @@
 #include "signal_replay.h"
 #include "signal_storage.h"
 #include "main.h"
+#include <stdio.h>
+#include <string.h>
 
 /*==================[internal data]==========================================*/
 
@@ -21,7 +23,7 @@ void vReplay_Task(void *pvParameters)
     
     for (;;) {
         printf("hello from signal replay");
-        vTaskDelay(pdMS_TO_TICKS(500));
+        vTaskDelay(pdMS_TO_TICKS(10000));
         // switch (xReplayState) {
         //     case REPLAY_STATE_IDLE:
         //         /* Wait for replay command */
