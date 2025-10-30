@@ -160,41 +160,43 @@ void vUI_Task(void *pvParameters)
     
     printf("UI Task started.\r\n");
     
-    // for (;;) {
-    //     /* Check for incoming commands */
-    //     if (xQueueReceive(xUICommandQueue, &command, 0) == pdPASS) {
-    //         ProcessUICommand(command);
-    //     }
+    for (;;) {
+        printf("hello from ui controller");
+        vTaskDelay(pdMS_TO_TICKS(500));
+        // /* Check for incoming commands */
+        // if (xQueueReceive(xUICommandQueue, &command, 0) == pdPASS) {
+        //     ProcessUICommand(command);
+        // }
         
-    //     /* Update display based on current state */
-    //     switch (xUIState) {
-    //         case UI_STATE_MENU:
-    //             DisplayMenu();
-    //             break;
+        // /* Update display based on current state */
+        // switch (xUIState) {
+        //     case UI_STATE_MENU:
+        //         DisplayMenu();
+        //         break;
                 
-    //         case UI_STATE_CAPTURE_IR:
-    //             DisplayCaptureIR();
-    //             break;
+        //     case UI_STATE_CAPTURE_IR:
+        //         DisplayCaptureIR();
+        //         break;
                 
-    //         case UI_STATE_CAPTURE_RF:
-    //             DisplayCaptureRF();
-    //             break;
+        //     case UI_STATE_CAPTURE_RF:
+        //         DisplayCaptureRF();
+        //         break;
                 
-    //         case UI_STATE_FINISHED:
-    //             DisplayFinished();
-    //             break;
+        //     case UI_STATE_FINISHED:
+        //         DisplayFinished();
+        //         break;
                 
-    //         case UI_STATE_FILES:
-    //             DisplayFiles();
-    //             break;
+        //     case UI_STATE_FILES:
+        //         DisplayFiles();
+        //         break;
                 
-    //         default:
-    //             break;
-    //     }
+        //     default:
+        //         break;
+        // }
         
-    //     /* Maintain periodic delay */
-    //     vTaskDelayUntil(&last_wake_time, pdMS_TO_TICKS(500));
-    // }
+        // /* Maintain periodic delay */
+        // vTaskDelayUntil(&last_wake_time, pdMS_TO_TICKS(500));
+    }
 }
 
 void UI_Init(void)

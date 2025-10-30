@@ -30,38 +30,40 @@ void vSignalCaptureIR_Task(void *pvParameters)
     
     printf("SignalCaptureIR Task started.\r\n");
     
-    // for (;;) {
-    //     /* Wait for watermark or notification that capture is complete */
-    //     bytes_received = xStreamBufferReceive(
-    //         xStreamBufferIR,
-    //         sample_buffer,
-    //         sizeof(sample_buffer),
-    //         portMAX_DELAY
-    //     );
+    for (;;) {
+        printf("hello from signal capture IR");
+        vTaskDelay(pdMS_TO_TICKS(500));
+        // /* Wait for watermark or notification that capture is complete */
+        // bytes_received = xStreamBufferReceive(
+        //     xStreamBufferIR,
+        //     sample_buffer,
+        //     sizeof(sample_buffer),
+        //     portMAX_DELAY
+        // );
         
-    //     if (bytes_received > 0 && xIRCaptureActive) {
-    //         /* Create packet with captured data */
-    //         packet = pvPortMalloc(sizeof(SignalPacket_t) + bytes_received);
-    //         if (packet != NULL) {
-    //             packet->mode = SIGNAL_MODE_IR;
-    //             packet->timestamp_ms = capture_start_time;
-    //             packet->sample_count = bytes_received / sizeof(uint32_t);
-    //             memcpy(packet->data, sample_buffer, bytes_received);
+        // if (bytes_received > 0 && xIRCaptureActive) {
+        //     /* Create packet with captured data */
+        //     packet = pvPortMalloc(sizeof(SignalPacket_t) + bytes_received);
+        //     if (packet != NULL) {
+        //         packet->mode = SIGNAL_MODE_IR;
+        //         packet->timestamp_ms = capture_start_time;
+        //         packet->sample_count = bytes_received / sizeof(uint32_t);
+        //         memcpy(packet->data, sample_buffer, bytes_received);
                 
-    //             /* Send to storage queue */
-    //             if (xStorageQueue != NULL) {
-    //                 if (xQueueSend(xStorageQueue, &packet, 0) != pdPASS) {
-    //                     /* Queue full, free packet */
-    //                     vPortFree(packet);
-    //                     printf("ERROR: Storage queue full!\r\n");
-    //                 }
-    //             }
-    //         }
-    //     }
+        //         /* Send to storage queue */
+        //         if (xStorageQueue != NULL) {
+        //             if (xQueueSend(xStorageQueue, &packet, 0) != pdPASS) {
+        //                 /* Queue full, free packet */
+        //                 vPortFree(packet);
+        //                 printf("ERROR: Storage queue full!\r\n");
+        //             }
+        //         }
+        //     }
+        // }
         
-    //     /* Small delay to prevent CPU spinning */
-    //     vTaskDelay(1);
-    // }
+        // /* Small delay to prevent CPU spinning */
+        // vTaskDelay(1);
+    }
 }
 
 void vSignalCaptureRF_Task(void *pvParameters)
@@ -73,36 +75,38 @@ void vSignalCaptureRF_Task(void *pvParameters)
     printf("SignalCaptureRF Task started.\r\n");
     
     for (;;) {
-        /* Wait for watermark or notification that capture is complete */
-        bytes_received = xStreamBufferReceive(
-            xStreamBufferRF,
-            sample_buffer,
-            sizeof(sample_buffer),
-            portMAX_DELAY
-        );
+        printf("hello from signal capture RF");
+        vTaskDelay(pdMS_TO_TICKS(500));
+        // /* Wait for watermark or notification that capture is complete */
+        // bytes_received = xStreamBufferReceive(
+        //     xStreamBufferRF,
+        //     sample_buffer,
+        //     sizeof(sample_buffer),
+        //     portMAX_DELAY
+        // );
         
-        if (bytes_received > 0 && xRFCaptureActive) {
-            /* Create packet with captured data */
-            packet = pvPortMalloc(sizeof(SignalPacket_t) + bytes_received);
-            if (packet != NULL) {
-                packet->mode = SIGNAL_MODE_RF;
-                packet->timestamp_ms = capture_start_time;
-                packet->sample_count = bytes_received / sizeof(uint32_t);
-                memcpy(packet->data, sample_buffer, bytes_received);
+        // if (bytes_received > 0 && xRFCaptureActive) {
+        //     /* Create packet with captured data */
+        //     packet = pvPortMalloc(sizeof(SignalPacket_t) + bytes_received);
+        //     if (packet != NULL) {
+        //         packet->mode = SIGNAL_MODE_RF;
+        //         packet->timestamp_ms = capture_start_time;
+        //         packet->sample_count = bytes_received / sizeof(uint32_t);
+        //         memcpy(packet->data, sample_buffer, bytes_received);
                 
-                /* Send to storage queue */
-                if (xStorageQueue != NULL) {
-                    if (xQueueSend(xStorageQueue, &packet, 0) != pdPASS) {
-                        /* Queue full, free packet */
-                        vPortFree(packet);
-                        printf("ERROR: Storage queue full!\r\n");
-                    }
-                }
-            }
-        }
+        //         /* Send to storage queue */
+        //         if (xStorageQueue != NULL) {
+        //             if (xQueueSend(xStorageQueue, &packet, 0) != pdPASS) {
+        //                 /* Queue full, free packet */
+        //                 vPortFree(packet);
+        //                 printf("ERROR: Storage queue full!\r\n");
+        //             }
+        //         }
+        //     }
+        // }
         
-        /* Small delay to prevent CPU spinning */
-        vTaskDelay(1);
+        // /* Small delay to prevent CPU spinning */
+        // vTaskDelay(1);
     }
 }
 

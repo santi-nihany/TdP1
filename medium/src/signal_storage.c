@@ -117,86 +117,88 @@ void vStorage_Task(void *pvParameters)
     // }
     
     // // Main task loop
-    // for (;;) {
-    //     // Wait for packets from capture tasks
-    //     if (xQueueReceive(xStorageQueue, &packet, portMAX_DELAY) == pdPASS) {
+    for (;;) {
+        printf("hello from storage");
+        vTaskDelay(pdMS_TO_TICKS(500));
+        // // Wait for packets from capture tasks
+        // if (xQueueReceive(xStorageQueue, &packet, portMAX_DELAY) == pdPASS) {
             
-    //         // Take storage mutex (only one task can access SD)
-    //         if (xSemaphoreTake(xStorageMutex, portMAX_DELAY) == pdPASS) {
+        //     // Take storage mutex (only one task can access SD)
+        //     if (xSemaphoreTake(xStorageMutex, portMAX_DELAY) == pdPASS) {
                 
-    //             // Check if SD is mounted
-    //             if (!sd_mounted) {
-    //                 if (MountSD() != pdPASS) {
-    //                     printf("[Storage] ERROR: Cannot write, SD not mounted\r\n");
-    //                     vPortFree(packet);
-    //                     xSemaphoreGive(xStorageMutex);
-    //                     continue;
-    //                 }
-    //             }
+        //         // Check if SD is mounted
+        //         if (!sd_mounted) {
+        //             if (MountSD() != pdPASS) {
+        //                 printf("[Storage] ERROR: Cannot write, SD not mounted\r\n");
+        //                 vPortFree(packet);
+        //                 xSemaphoreGive(xStorageMutex);
+        //                 continue;
+        //             }
+        //         }
                 
-    //             // Generate filename
-    //             if (GenerateFilename(filename, packet->mode) == pdPASS) {
+        //         // Generate filename
+        //         if (GenerateFilename(filename, packet->mode) == pdPASS) {
                     
-    //                 printf("[Storage] Saving signal to: %s\r\n", filename);
+        //             printf("[Storage] Saving signal to: %s\r\n", filename);
                     
-    //                 // Open file for writing (create new file)
-    //                 fr = f_open(&fil, filename, FA_WRITE | FA_CREATE_ALWAYS);
+        //             // Open file for writing (create new file)
+        //             fr = f_open(&fil, filename, FA_WRITE | FA_CREATE_ALWAYS);
                     
-    //                 if (fr == FR_OK) {
+        //             if (fr == FR_OK) {
                         
-    //                     // Write file header (simple version)
-    //                     char header[64];
-    //                     int n = sprintf(header, "MED1;VER1;TS=%lu;MODE=%d;SAMPLES=%lu\r\n",
-    //                                     packet->timestamp_ms,
-    //                                     packet->mode,
-    //                                     packet->sample_count);
-    //                     f_write(&fil, header, n, &bytes_written);
-    //                     total_bytes = bytes_written;
+        //                 // Write file header (simple version)
+        //                 char header[64];
+        //                 int n = sprintf(header, "MED1;VER1;TS=%lu;MODE=%d;SAMPLES=%lu\r\n",
+        //                                 packet->timestamp_ms,
+        //                                 packet->mode,
+        //                                 packet->sample_count);
+        //                 f_write(&fil, header, n, &bytes_written);
+        //                 total_bytes = bytes_written;
                         
-    //                     // Write signal data
-    //                     uint32_t data_size = sizeof(uint32_t) * packet->sample_count;
-    //                     fr = f_write(&fil, packet->data, data_size, &bytes_written);
-    //                     total_bytes += bytes_written;
+        //                 // Write signal data
+        //                 uint32_t data_size = sizeof(uint32_t) * packet->sample_count;
+        //                 fr = f_write(&fil, packet->data, data_size, &bytes_written);
+        //                 total_bytes += bytes_written;
                         
-    //                     // Close file
-    //                     f_close(&fil);
+        //                 // Close file
+        //                 f_close(&fil);
                         
-    //                     if (fr == FR_OK) {
-    //                         printf("[Storage] Wrote %d bytes to %s\r\n", total_bytes, filename);
-    //                         gpioWrite(LEDG, ON);
-    //                         vTaskDelay(pdMS_TO_TICKS(100));
-    //                         gpioWrite(LEDG, OFF);
-    //                     } else {
-    //                         printf("[Storage] ERROR: Write failed (FRESULT=%d)\r\n", fr);
-    //                         gpioWrite(LEDR, ON);
-    //                     }
+        //                 if (fr == FR_OK) {
+        //                     printf("[Storage] Wrote %d bytes to %s\r\n", total_bytes, filename);
+        //                     gpioWrite(LEDG, ON);
+        //                     vTaskDelay(pdMS_TO_TICKS(100));
+        //                     gpioWrite(LEDG, OFF);
+        //                 } else {
+        //                     printf("[Storage] ERROR: Write failed (FRESULT=%d)\r\n", fr);
+        //                     gpioWrite(LEDR, ON);
+        //                 }
                         
-    //                 } else {
-    //                     printf("[Storage] ERROR: Cannot open file (FRESULT=%d)\r\n", fr);
-    //                     gpioWrite(LEDR, ON);
-    //                 }
+        //             } else {
+        //                 printf("[Storage] ERROR: Cannot open file (FRESULT=%d)\r\n", fr);
+        //                 gpioWrite(LEDR, ON);
+        //             }
                     
-    //             } else {
-    //                 printf("[Storage] ERROR: Cannot generate filename\r\n");
-    //                 gpioWrite(LEDR, ON);
-    //             }
+        //         } else {
+        //             printf("[Storage] ERROR: Cannot generate filename\r\n");
+        //             gpioWrite(LEDR, ON);
+        //         }
                 
-    //             // Free packet memory
-    //             vPortFree(packet);
+        //         // Free packet memory
+        //         vPortFree(packet);
                 
-    //             // Release mutex
-    //             xSemaphoreGive(xStorageMutex);
+        //         // Release mutex
+        //         xSemaphoreGive(xStorageMutex);
                 
-    //         } else {
-    //             // Mutex timeout or error
-    //             printf("[Storage] WARNING: Cannot take mutex\r\n");
-    //             vPortFree(packet); // Free packet to avoid memory leak
-    //         }
-    //     }
+        //     } else {
+        //         // Mutex timeout or error
+        //         printf("[Storage] WARNING: Cannot take mutex\r\n");
+        //         vPortFree(packet); // Free packet to avoid memory leak
+        //     }
+        // }
         
-    //     // Small delay to prevent CPU spinning
-    //     vTaskDelay(pdMS_TO_TICKS(10));
-    // }
+        // // Small delay to prevent CPU spinning
+        // vTaskDelay(pdMS_TO_TICKS(10));
+    }
 }
 
 BaseType_t Storage_Init(void)
