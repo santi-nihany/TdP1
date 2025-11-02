@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug (OpenOCD)",
+      "type": "cortex-debug",
+      "request": "attach",
+      "servertype": "openocd",
+      "cwd": "${workspaceRoot}",
+      "executable": "program/out/program.elf",
+      "configFiles": ["scripts/openocd/lpc4337.cfg"],
+      "numberOfProcessors": 2,
+      "targetProcessor": 0
+    }
+  ]
+}

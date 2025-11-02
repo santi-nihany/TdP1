@@ -1,17 +1,28 @@
-[![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) [![Build Status](https://travis-ci.com/epernia/firmware_v3.svg?branch=master)](https://travis-ci.com/epernia/firmware_v3) (Travis CI status)
+# MÃ©dium
 
-# Framework for Embedded Systems Firmware development in C/C++ 
+## Desarrollo
 
-## IMPORTANT
+Para instalar
 
-**This environment is under construction!!**
+- Utilizar [Visual Studio Code](https://code.visualstudio.com/).
+  - Instalar las extensiones recomendadas: [C/C++](https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools) y [Cortex Debug](https://marketplace.visualstudio.com/items?itemName=marus25.cortex-debug).
+- Instalar la toolchain de [ARM para embebidos](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads).
+  1. Descargar para tu sistema operativo (por ejemplo, _x86_64 Linux hosted cross toolchains_).
+  2. Procurar que el target sea _bare-metal_, denominado `arm-none-eabi`.
+  3. Extraer en `/opt/gcc-arm-embedded`.
+  4. AÃ±adir `/opt/gcc-arm-embedded/bin` a tu PATH.
+- Instalar [OpenOCD](https://openocd.org/) v0.12.0 o superior.
+  ```bash
+  # Debian/Ubuntu
+  sudo apt install openocd
+  # Arch
+  sudo pacman -S openocd
+  ```
 
-**Always use the [released versions](../../releases) because in these all examples are tested and the API documentation is consistent. The master branch may contain inconsistencies because this environment is currently under development. See the Travis CI tag above to know the status of this repository.**
+Luego, todos los comandos se encuentran en el Makefile:
 
-## About firmware_v3
-
-**firmware_v3** is a makefile-based project that act as a framework for Embedded Systems firmware development in C/C++ language. It support toolchain, libraries and examples for several platforms.
-
-- [More information in english](documentation/firmware/readme/readme-en.md).
-- [Más información en español](documentation/firmware/readme/readme-es.md).
-
+```bash
+make all      # para compilar
+make download # para bajar a la placa
+make clean    # para limpiar la salida 
+```
