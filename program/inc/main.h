@@ -9,5 +9,6 @@
 #define MAIN_H
 
 #include "sapi.h"
+#include <string.h>
 
 #endif
