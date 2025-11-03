@@ -25,7 +25,7 @@ typedef enum {
   SH1106_INVERSE = -1,
 } SH1106_Color;
 
-bool_t sh1106_init();
+void sh1106_init();
 void sh1106_draw(uint8_t x, uint8_t y, SH1106_Color color);
 void sh1106_fill(SH1106_Color color);
 void sh1106_place(const Sprite sprite, uint8_t x, uint8_t y);

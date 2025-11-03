@@ -96,11 +96,21 @@ const Sprite Sprite_0001 = {
 };
 
 // array size is 10
-static const uint8_t pixil_frame_0_2_image[] = {0x08, 0x04, 0xfe, 0x00, 0x00,
-                                                0x01, 0x01, 0x01, 0x01, 0x01};
+static const uint8_t Sprite_0002_image[] = {0xa0, 0x59, 0xa6, 0xa0, 0x40,
+                                            0x00, 0x13, 0x0c, 0x00, 0x00};
 
-const Sprite pixil_frame_0_2_ = {
+const Sprite Sprite_0002 = {
     .width = 5,
-    .height = 10,
-    .image = pixil_frame_0_2_image,
+    .height = 13,
+    .image = Sprite_0002_image,
+};
+
+// array size is 10
+static const uint8_t Sprite_0003_image[] = {0x40, 0xa0, 0xa6, 0x59, 0xa0,
+                                            0x00, 0x00, 0x0c, 0x13, 0x00};
+
+const Sprite Sprite_0003 = {
+    .width = 5,
+    .height = 13,
+    .image = Sprite_0003_image,
 };

@@ -6,7 +6,7 @@
 //===----------------------------------------------------------------------===//
 
 #include "main.h"
-#include "sh1106.h"
+#include "display.h"
 #include "sprites.h"
 
 int main(void) {
@@ -15,19 +15,41 @@ int main(void) {
   i2cInit(I2C0, 100000);
 
   // Inicializar componentes
-  sh1106_init();
+  displayInit();
 
-  sh1106_place(Sprite_0001, 0, 0);
-  sh1106_place(pixil_frame_0_2_, 8, 1);
-  sh1106_update();
+  displayPlace(Sprite_0001, 0, 0);
+  displayUpdate();
 
-  uint8_t leds[] = {LEDB, LED1, LED2, LED3};
-  uint8_t i = 1;
+  bool_t tec1, tec2;
   while (1) {
-    gpioWrite(leds[i], OFF);
-    i = (i + 1) % sizeof(leds);
-    gpioWrite(leds[i], ON);
-    delay(100);
+    if (tec1 != !gpioRead(TEC1)) {
+      tec1 = !gpioRead(TEC1);
+      gpioWrite(LED1, tec1);
+      if (tec1) {
+        displayDrawRectangle(64, 32, Sprite_0002.width, Sprite_0002.height,
+                             DISPLAY_BLACK, true);
+        displayDrawRectangle(104, 32, Sprite_0003.width, Sprite_0003.height,
+                             DISPLAY_BLACK, true);
+        displayPlace(Sprite_0002, 19, 32);
+        displayPlace(Sprite_0003, 59, 32);
+        displayUpdate();
+      }
+    }
+    if (tec2 != !gpioRead(TEC2)) {
+      tec2 = !gpioRead(TEC2);
+      gpioWrite(LED2, tec2);
+      if (tec2) {
+        displayDrawRectangle(19, 32, Sprite_0002.width, Sprite_0002.height,
+                             DISPLAY_BLACK, true);
+        displayDrawRectangle(59, 32, Sprite_0003.width, Sprite_0003.height,
+                             DISPLAY_BLACK, true);
+        displayPlace(Sprite_0002, 64, 32);
+        displayPlace(Sprite_0003, 104, 32);
+        displayUpdate();
+      }
+    }
+
+    delay(50);
   }
 
   return 0;

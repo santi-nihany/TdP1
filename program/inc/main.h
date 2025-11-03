@@ -9,6 +9,7 @@
 #define MAIN_H
 
 #include "sapi.h"
+#include <stdlib.h>
 #include <string.h>
 
 #endif

@@ -17,6 +17,7 @@ typedef struct {
 } Sprite;
 
 extern const Sprite Sprite_0001;
-extern const Sprite pixil_frame_0_2_;
+extern const Sprite Sprite_0002;
+extern const Sprite Sprite_0003;
 
 #endif

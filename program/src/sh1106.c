@@ -43,8 +43,8 @@ static void sh1106_command(SH1106_Command cmd) {
   i2cWrite(I2C0, SH1106_I2C_ADDR, data, 2, TRUE);
 }
 
-// Inicialización del SH1106
-bool_t sh1106_init(void) {
+/// Inicialización del SH1106
+void sh1106_init(void) {
   // Secuencia de inicialización
   sh1106_command(SH1106_DISPLAYOFF);
   sh1106_command(SH1106_SETDISPLAYCLOCKDIV);
@@ -72,8 +72,6 @@ bool_t sh1106_init(void) {
 
   sh1106_fill(SH1106_BLACK);
   sh1106_update();
-
-  return TRUE;
 }
 
 /// Actualiza el display con lo escrito en el buffer
